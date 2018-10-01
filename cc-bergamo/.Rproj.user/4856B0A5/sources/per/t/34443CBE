@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1530199685745.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "419215570",
+    "id" : "34443CBE",
+    "lastKnownWriteTime" : 1530201176,
+    "last_content_update" : 1530201176127,
+    "path" : "~/Desktop/carte di controllo/cc/global.R",
+    "project_path" : "global.R",
+    "properties" : {
+        "cursorPosition" : "15,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
