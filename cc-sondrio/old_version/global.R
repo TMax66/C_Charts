@@ -5,7 +5,6 @@ library(ggplot2)
 library(plotly)
 library(googlesheets)
 library(dplyr)
-library(lubridate)
 
 ########################
 

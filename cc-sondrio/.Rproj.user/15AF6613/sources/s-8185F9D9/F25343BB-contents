@@ -6,10 +6,7 @@ tabPanel("Sierologia",
        selectInput("ws", "",
                    choices = ccsiero$ws$ws_title),
      
-       #tableOutput("tsiero"),
-       br(),
-       
-      sliderInput("anno","anno",min=2015, max=2022,value="2019")
+       tableOutput("tsiero")
        
      ),#chiude il panello laterale
      
@@ -21,24 +18,21 @@ tabPanel("Sierologia",
            plotlyOutput("MyPlot2") ))),
     
  
-tabPanel("Microbiologia Alimenti",
-         fluidPage(
-           sidebarPanel(
-             selectInput("wsm", "",
-                         choices = ccmicro$ws$ws_title),
-             
-             #tableOutput("tmicro"),
-             br(),
-             
-             sliderInput("anno2","anno",min=2015, max=2022,value="2019")
-             
-           ),#chiude il panello laterale
-           
-           mainPanel(
-             
-
-             plotlyOutput("MyPlotmicro"),
-             plotlyOutput("MyPlot2micro") ))),
+# tabPanel("Microbiologia Alimenti",
+#          fluidPage(
+#            sidebarPanel(
+#              selectInput("wsm", "",
+#                          choices = ccmicro$ws$ws_title),
+#              
+#              tableOutput("tmicro")
+#              
+#            ),#chiude il panello laterale
+#            
+#            mainPanel(
+#              
+# 
+#              plotlyOutput("MyPlotmicro"),
+#              plotlyOutput("MyPlot2micro") ))),
 
 tabPanel("Validazione",
       fluidPage(

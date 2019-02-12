@@ -6,7 +6,7 @@ tabPanel("Sierologia",
        selectInput("ws", "",
                    choices = ccsiero$ws$ws_title),
      
-       #tableOutput("tsiero"),
+       tableOutput("tsiero"),
        br(),
        
       sliderInput("anno","anno",min=2015, max=2022,value="2019")
@@ -27,7 +27,7 @@ tabPanel("Microbiologia Alimenti",
              selectInput("wsm", "",
                          choices = ccmicro$ws$ws_title),
              
-             #tableOutput("tmicro"),
+             tableOutput("tmicro"),
              br(),
              
              sliderInput("anno2","anno",min=2015, max=2022,value="2019")
