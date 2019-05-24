@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1555414531930.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2997159595",
+    "id" : "145B2091",
+    "lastKnownWriteTime" : 1549275954,
+    "last_content_update" : 1549275954,
+    "path" : "D:/Dati/vito.tranquillo/gitProject/C_Charts/cc-bergamo/global.R",
+    "project_path" : "global.R",
+    "properties" : {
+        "cursorPosition" : "12,37",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
