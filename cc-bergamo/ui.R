@@ -17,8 +17,11 @@ tabPanel("Sierologia",
      
          # conditionalPanel(
          #   condition = "input.ws == 'Brucellosi'",
-           plotlyOutput("MyPlot"),
-           plotlyOutput("MyPlot2") ))),
+           plotlyOutput("MyPlot") %>% 
+             withSpinner(color="blue", type=8),
+           
+           plotlyOutput("MyPlot2") %>%
+             withSpinner(color="blue", type=8)))),
     
  
 tabPanel("Microbiologia Alimenti",
@@ -37,8 +40,10 @@ tabPanel("Microbiologia Alimenti",
            mainPanel(
              
 
-             plotlyOutput("MyPlotmicro"),
-             plotlyOutput("MyPlot2micro") ))),
+             plotlyOutput("MyPlotmicro")%>%
+               withSpinner(color="blue", type=8),
+             plotlyOutput("MyPlot2micro")%>%
+               withSpinner(color="blue", type=8) ))),
 
 tabPanel("Validazione",
       fluidPage(
