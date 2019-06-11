@@ -1,0 +1,13 @@
+name: CCbergamo
+title: CCbergamo
+username:
+account: izslerbg
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 976402
+bundleId: 2145940
+url: https://izslerbg.shinyapps.io/CCbergamo/
+when: 1560270911.75581
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: _gitignore|codici.R|old_data_ccmicrobiologia.xlsx|old_data_ccsierologia.xlsx
