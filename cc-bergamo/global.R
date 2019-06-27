@@ -1,6 +1,5 @@
 library(shiny)
 library(datasets)
-#library(qicharts2)
 library(ggplot2)
 library(plotly)
 library(googlesheets)
@@ -10,7 +9,7 @@ library(shinycssloaders)
 
 ########################
 
-ccsiero <-gs_title("ccsierologiaBG")
+ccsiero <-gs_title("bgccsierologia")
 ccmicro <-gs_title("ccmicrobiologia")
 
 
