@@ -6,7 +6,7 @@ library(plotly)
 library(googlesheets)
 library(dplyr)
 library(lubridate)
-
+library(shinycssloaders)
 ########################
 
-ccsiero<-gs_title("ccsierologiaSO")
+ccsiero<-gs_title("soccsierologia")
