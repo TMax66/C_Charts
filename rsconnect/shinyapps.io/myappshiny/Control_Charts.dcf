@@ -1,0 +1,13 @@
+name: Control_Charts
+title: Control_Charts
+username:
+account: myappshiny
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 346358
+bundleId: 1384520
+url: https://myappshiny.shinyapps.io/Control_Charts/
+when: 1526900257.56088
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: .RData|aggiornamenti/old_app.R

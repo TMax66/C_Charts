@@ -5,9 +5,9 @@ account: izslerbg
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 399163
-bundleId: 2243427
+bundleId: 2244681
 url: https://izslerbg.shinyapps.io/CCsondrio/
-when: 1563435527.95375
+when: 1563465166.54721
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: old_version/Dati per carte di controllo.xls|old_version/global.R|old_version/old_data_ccsierologiaSO.xlsx|old_version/server.R|old_version/ui.R|revisione

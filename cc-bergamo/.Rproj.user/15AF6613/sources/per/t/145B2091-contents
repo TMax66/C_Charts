@@ -6,11 +6,10 @@ library(plotly)
 library(googlesheets)
 library(dplyr)
 library(lubridate)
-library(shinycssloaders)
 
 ########################
 
-ccsiero <-gs_title("bgccsierologia")
+ccsiero <-gs_title("ccsierologia")
 ccmicro <-gs_title("ccmicrobiologia")
 
 

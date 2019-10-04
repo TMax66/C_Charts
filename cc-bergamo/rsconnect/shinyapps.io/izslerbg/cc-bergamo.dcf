@@ -4,10 +4,10 @@ username:
 account: izslerbg
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 975573
-bundleId: 2144741
+appId: 399125
+bundleId: 1532320
 url: https://izslerbg.shinyapps.io/cc-bergamo/
-when: 1560241934.64326
+when: 1534155102.63882
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: _gitignore
+ignoredFiles: .httr-oauth|_gitignore|_httr-oauth.gz|ccmicrobiologia.xls|ccsierologia.xls|validazione.html
