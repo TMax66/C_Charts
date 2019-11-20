@@ -9,6 +9,11 @@ library(lubridate)
 library(shinycssloaders)
 
 ########################
+#token <- gs_auth(cache = FALSE)
+#gd_token()
+# saveRDS(token, file = "googlesheets_token.rds")
+gs_auth(token = "googlesheets_token.rds")
+suppressMessages(gs_auth(token = "googlesheets_token.rds", verbose = FALSE))
 
 ccsiero <-gs_title("bgccsierologia")
 ccmicro <-gs_title("ccmicrobiologia")
