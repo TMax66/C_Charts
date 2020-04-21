@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1575539138107.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4139884346",
+    "id" : "9690CE3B",
+    "lastKnownWriteTime" : 1578662096,
+    "last_content_update" : -2147483648,
+    "path" : "D:/Dati/vito.tranquillo/gitProject/C_Charts/cc-binago/global.R",
+    "project_path" : "global.R",
+    "properties" : {
+        "cursorPosition" : "21,0",
+        "scrollLine" : "4"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

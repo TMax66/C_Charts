@@ -7,6 +7,7 @@ library(googlesheets)
 library(dplyr)
 library(lubridate)
 library(shinycssloaders)
+library(shinyjs)
 
 ########################
 #token <- gs_auth(cache = FALSE)

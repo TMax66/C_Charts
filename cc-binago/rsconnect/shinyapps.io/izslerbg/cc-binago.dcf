@@ -1,0 +1,13 @@
+name: cc-binago
+title: cc-binago
+username:
+account: izslerbg
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1616951
+bundleId: 2719336
+url: https://izslerbg.shinyapps.io/cc-binago/
+when: 1578662153.29996
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: codici.R

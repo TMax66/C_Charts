@@ -1,0 +1,101 @@
+shinyServer(function(input, output, session) {
+  
+  
+  dati<-reactive({ 
+    sheet <- gs_title("cartedicontrollo")
+    gs_read(sheet,ws=input$mmpp)
+    dati()
+  })
+    
+
+  
+  output$tabella<-renderTable({
+    
+   dati()
+    
+  })
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  # added "session" because updateSelectInput requires it
+  
+  
+#   data <- reactive({ 
+#     req(input$file1) ## ?req #  require that the input is available
+#     
+#     inFile <- input$file1 
+#     
+#     # tested with a following dataset: write.csv(mtcars, "mtcars.csv")
+#     # and                              write.csv(iris, "iris.csv")
+#     df <- read.csv(inFile$datapath, header = TRUE, sep = ";",
+#                    dec=",")
+#     
+#     
+#     # Update inputs (you could create an observer with both updateSel...)
+#     # You can also constraint your choices. If you wanted select only numeric
+#     # variables you could set "choices = sapply(df, is.numeric)"
+#     # It depends on what do you want to do later on.
+#     
+#     #updateSelectInput(session, inputId = 'xcol', label = 'X Variable',
+#     # choices = names(df), selected = names(df))
+#     #updateSelectInput(session, inputId = 'ycol', label = 'Y Variable',
+#     #choices = names(df), selected = names(df)[2])
+#     
+#     return(df)
+#   })
+#   
+#   output$contents <- renderTable({
+#     data()
+#   })
+#   
+#   output$MyPlot <- renderPlotly({
+#     
+#     df<-data()
+#     
+#     meanx<-mean(df$X,na.rm=T)
+#     xul<-mean(df$X, na.rm = T)+2.66*mean(df$R, na.rm=T)
+#     xil<-mean(df$X, na.rm = T)-2.66*mean(df$R, na.rm=T)
+#     xends<-max(df$piastra, na.rm=TRUE)
+#     
+#     ggplotly(ggplot(df, aes(x = piastra, y = X)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
+#                geom_segment(aes(x=0,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
+#                geom_segment(aes(x=0,xend=xends,y=xul,yend=xul), color='blue', linetype=1,size=0.2)+
+#                geom_segment(aes(x=0,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
+#                geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = meanx, label = paste("LC=", round(meanx,3))),size=3)+
+#                geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
+#                geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
+#     
+#   })
+#   
+#   output$MyPlot2 <- renderPlotly({
+#     
+#     
+#     df<-data()
+#     
+#     meanx<-mean(df$R,na.rm=T)
+#     xul<-3.26*mean(df$R, na.rm=T)
+#     xil<-0
+#     xends<-max(df$piastra, na.rm=TRUE)
+#     ggplotly(ggplot(df, aes(x = piastra, y = R)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
+#                geom_segment(aes(x=0,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
+#                geom_segment(aes(x=0,xend=xends,y=xul,yend=xul), color='blue', linetype=1, size=0.2)+
+#                geom_segment(aes(x=0,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
+#                geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = meanx, label = paste("LC=", round(meanx,3))),size=3)+
+#                geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
+#                geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
+#     
+#   })
+ })

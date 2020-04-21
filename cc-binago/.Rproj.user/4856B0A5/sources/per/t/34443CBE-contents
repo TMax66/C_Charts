@@ -1,0 +1,16 @@
+library(shiny)
+library(datasets)
+library(qicharts2)
+library(ggplot2)
+library (plotly)
+library(googlesheets)
+
+##############################carico il dataset da googlesheet##############
+# loadData <- function() {
+#   # Grab the Google Sheet
+#   sheet <- gs_title("cartedicontrollo")
+#   # Read the data
+#   gs_read(sheet,ws=input$mmpp)
+# }
+
+

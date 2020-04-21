@@ -1,5 +1,108 @@
-shinyServer(function(input, output, session) {
-  
+
+credentials <- list("CCbergamo" = ".#.Cc20")
+
+shinyServer(function(input, output) {
+USER <- reactiveValues(Logged = FALSE)
+
+observeEvent(input$.login, {
+  if (isTRUE(credentials[[input$.username]]==input$.password)){
+    USER$Logged <- TRUE
+  } else {
+    show("message")
+    output$message = renderText("Invalid user name or password")
+    delay(2000, hide("message", anim = TRUE, animType = "fade"))
+  }
+})
+
+output$app = renderUI(
+  if (!isTRUE(USER$Logged)) {
+    fluidRow(column(width=4, offset = 4,
+                    wellPanel(id = "login",
+                              textInput(".username", "Username:"),
+                              passwordInput(".password", "Password:"),
+                              div(actionButton(".login", "Log in"), style="text-align: center;")
+                    ),
+                    textOutput("message")
+    ))
+  } else {
+    navbarPage("Carte di controllo",
+               
+               tabPanel("Sierologia",
+                        fluidPage(
+                          sidebarPanel(
+                            selectInput("ws", "",
+                                        choices = ccsiero$ws$ws_title),
+                            
+                            #tableOutput("tsiero"),
+                            br(),
+                            
+                            sliderInput("anno","anno",min=2015, max=2022,value="2019")
+                            
+                          ),#chiude il panello laterale
+                          
+                          mainPanel(
+                            
+                            # conditionalPanel(
+                            #   condition = "input.ws == 'Brucellosi'",
+                            plotlyOutput("MyPlot") %>% 
+                              withSpinner(color="blue", type=8),
+                            
+                            plotlyOutput("MyPlot2") %>%
+                              withSpinner(color="blue", type=8)))),
+               
+               
+               tabPanel("Microbiologia Alimenti",
+                        fluidPage(
+                          sidebarPanel(
+                            selectInput("wsm", "",
+                                        choices = ccmicro$ws$ws_title),
+                            
+                            #tableOutput("tmicro"),
+                            br(),
+                            
+                            sliderInput("anno2","anno",min=2015, max=2022,value="2019")
+                            
+                          ),#chiude il panello laterale
+                          
+                          mainPanel(
+                            
+                            
+                            plotlyOutput("MyPlotmicro")%>%
+                              withSpinner(color="blue", type=8),
+                            plotlyOutput("MyPlot2micro")%>%
+                              withSpinner(color="blue", type=8) ))),
+               
+               tabPanel("Validazione",
+                        fluidPage(
+                          fluidRow( 
+                            column(12, div( 
+                              includeHTML('validazione.html')
+                            ))
+                          ),
+                          
+                          hr(),
+                          
+                          fluidRow(
+                            column(4, div(
+                              tableOutput("validazione")
+                            )),
+                            
+                            column(8, div( 
+                              plotlyOutput("validX"),
+                              plotlyOutput("validR")
+                            ))
+                          )
+                          
+                          
+                        ))
+               
+               
+    )
+    
+  }    
+    
+)    
+
 # ccsiero <-gs_title("ccsierologia")
 # ccmicro <-gs_title("ccmicrobiologia")
  
