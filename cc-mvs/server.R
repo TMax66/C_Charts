@@ -1,5 +1,5 @@
 
-credentials <- list("CCbergamo" = ".#.Cc20")
+credentials <- list("MVS" = "mvs")
 
 shinyServer(function(input, output) {
 USER <- reactiveValues(Logged = FALSE)
@@ -14,6 +14,9 @@ observeEvent(input$.login, {
   }
 })
 
+###UI###########################################################################
+
+###controllo password####
 output$app = renderUI(
   if (!isTRUE(USER$Logged)) {
     fluidRow(column(width=4, offset = 4,
@@ -25,52 +28,30 @@ output$app = renderUI(
                     textOutput("message")
     ))
   } else {
-    navbarPage("Carte di controllo",
+
+###UI___________________________________________________
+navbarPage("Carte di controllo",
                
-               tabPanel("Sierologia",
+               tabPanel("CC",
                         fluidPage(
                           sidebarPanel(
                             selectInput("ws", "",
-                                        choices = ccsiero$ws$ws_title),
-                            
-                            #tableOutput("tsiero"),
+                                        choices = c("mvs", "sierotipoA")),
+                            selectInput("par", "", 
+                                        choices = c("DO_Cn", "ICn7.5", "Cp202", "Cp7.5")), 
                             br(),
                             
-                            sliderInput("anno","anno",min=2015, max=2022,value="2019")
+                            #sliderInput("anno","anno",min=2015, max=2022,value="2019")
                             
                           ),#chiude il panello laterale
                           
                           mainPanel(
                             
-                            # conditionalPanel(
-                            #   condition = "input.ws == 'Brucellosi'",
                             plotlyOutput("MyPlot") %>% 
                               withSpinner(color="blue", type=8),
                             
                             plotlyOutput("MyPlot2") %>%
                               withSpinner(color="blue", type=8)))),
-               
-               
-               tabPanel("Microbiologia Alimenti",
-                        fluidPage(
-                          sidebarPanel(
-                            selectInput("wsm", "",
-                                        choices = ccmicro$ws$ws_title),
-                            
-                            #tableOutput("tmicro"),
-                            br(),
-                            
-                            sliderInput("anno2","anno",min=2015, max=2022,value="2019")
-                            
-                          ),#chiude il panello laterale
-                          
-                          mainPanel(
-                            
-                            
-                            plotlyOutput("MyPlotmicro")%>%
-                              withSpinner(color="blue", type=8),
-                            plotlyOutput("MyPlot2micro")%>%
-                              withSpinner(color="blue", type=8) ))),
                
                tabPanel("Validazione",
                         fluidPage(
@@ -103,41 +84,26 @@ output$app = renderUI(
     
 )    
 
-# ccsiero <-gs_title("ccsierologia")
-# ccmicro <-gs_title("ccmicrobiologia")
+###Server#####################################################################################################
  
   worksheet <- reactive({
     input$ws
   })
   
-  worksheetmicro<- reactive({
-    input$wsm
-  })
  
-  output$tsiero <- renderTable({
+ 
+dati<-reactive ({read_sheet(id$id, col_types = "cidddd", sheet = input$ws)  })
+  
+  
+  output$tdati <- renderTable({
     Sys.sleep(3)
-    
-    dati <- gs_read(ccsiero, ws = worksheet())#,locale = readr::locale(decimal_mark = ","))
-    dati %>% 
+    dati() %>% 
       arrange(desc(piastra)) %>% 
-      select(data,piastra) %>% #,X,R)
-      head()
-  
-    
+      head(10)
   })
   
   
-  output$tmicro <- renderTable({
-    Sys.sleep(3)
-
-    dati <- gs_read(ccmicro, ws = worksheetmicro())#,locale = readr::locale(decimal_mark = ","))
-    dati %>%
-      arrange(desc(piastra)) %>%
-      select(data,piastra) %>% #,X,R) %>%
-      head()
-
-
-  })
+  
 
   
   output$validazione<-renderTable({
@@ -150,8 +116,7 @@ output$app = renderUI(
   
   output$MyPlot <- renderPlotly({
     Sys.sleep(3)
-    df <- gs_read(ccsiero, ws = worksheet())
-    df<-as_tibble(df)
+    df <- dati
     df$data<-dmy(df$data)
     df<-mutate(df,anno=year(data))
     df$anno<-as.Date((paste(df$anno,"-01","-01",sep="")))
@@ -159,7 +124,7 @@ output$app = renderUI(
     dfx<-df %>% 
       filter(anno==input$anno) %>% 
       rowwise() %>% 
-      mutate(X=mean(c(ct1,ct2))) %>% 
+      mutate(X = input$parametro) %>% 
       data.frame() %>% 
       mutate(R = abs(X-lag(X)))
     
@@ -213,66 +178,6 @@ output$app = renderUI(
 })
   
 
-  output$MyPlotmicro <- renderPlotly({
-    Sys.sleep(3)
-    df <- gs_read(ccmicro, ws = worksheetmicro())
-    df<-as_tibble(df)
-    df$data<-dmy(df$data)
-    df<-mutate(df,anno=year(data))
-    #df<-na.omit(df)
-    df$anno<-as.Date((paste(df$anno,"-01","-01",sep="")))
-    df$anno<-substring(as.factor(df$anno),1,4)
-    dfx<-df %>% 
-      filter(anno==input$anno2) %>% 
-      mutate(R = abs(X-lag(X)))
-    
-    
-    meanx<-mean(dfx$X,na.rm=T)
-    xul<-mean(dfx$X, na.rm = T)+2.66*mean(dfx$R, na.rm=T)
-    xil<-mean(dfx$X, na.rm = T)-2.66*mean(dfx$R, na.rm=T)
-    xends<-max(dfx$piastra, na.rm=TRUE)
-    
-    ggplotly(ggplot(dfx, aes(x = piastra, y = X)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
-               
-               geom_segment(aes(x=piastra,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
-               geom_segment(aes(x=piastra,xend=xends,y=xul,yend=xul), color='blue', linetype=1,size=0.2)+
-               geom_segment(aes(x=piastra,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
-               geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = meanx, label = paste("LC=", round(meanx,3))),size=3)+
-               geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
-               geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
-    
-  })
-  
-  output$MyPlot2micro <- renderPlotly({
-    Sys.sleep(3)
-    df <- gs_read(ccmicro, ws = worksheetmicro())#,locale = readr::locale(decimal_mark = ","))
-    df<-as_tibble(df)
-    df$data<-dmy(df$data)
-    df<-mutate(df,anno=year(data))
-    #df<-na.omit(df)
-    df$anno<-as.Date((paste(df$anno,"-01","-01",sep="")))
-    df$anno<-substring(as.factor(df$anno),1,4)
-    dfx<-df %>% 
-      filter(anno==input$anno2) %>% 
-      mutate(R = abs(X-lag(X)))
-    
-    meanx<-mean(dfx$R,na.rm=T)
-    xul<-3.26*mean(dfx$R, na.rm=T)
-    xil<-0
-    xends<-max(dfx$piastra, na.rm=TRUE)
-    ggplotly(ggplot(dfx, aes(x = piastra, y = R)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
-               
-               geom_segment(aes(x=piastra,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
-               geom_segment(aes(x=piastra,xend=xends,y=xul,yend=xul), color='blue', linetype=1, size=0.2)+
-               geom_segment(aes(x=piastra,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
-               geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = meanx, label = paste("LC=", round(meanx,3))),size=3)+
-               geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
-               geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
-    
-    
-  })
-  
-  
   output$validR <- renderPlotly({
 
     df <- read.csv("validazione.csv", header=T, sep=";", dec=',')
