@@ -35,13 +35,23 @@ navbarPage("Carte di controllo",
                tabPanel("CC",
                         fluidPage(
                           sidebarPanel(
-                            selectInput("ws", "",
+                            selectInput("ws", "Seleziona la prova",
                                         choices = c("mvs", "sierotipoA")),
-                            selectInput("par", "", 
+                            selectInput("par", "Seleziona il parametro", 
                                         choices = c("DO_Cn", "ICn7.5", "Cp202", "Cp7.5")), 
                             br(),
                             
+                            tableOutput("dati"), 
+                            
                             #sliderInput("anno","anno",min=2015, max=2022,value="2019")
+                            
+                            a(actionButton("Ins", "Inserimento nuovi dati",
+                                           class = "btn-primary",
+                                           icon("flask")),
+                              href="https://docs.google.com/spreadsheets/d/1QMIQGZGB4oqIj6QNJdg6YaGZ1jc5PTmJz4-NP-YtLYs/edit?usp=sharing"),
+                            
+                            
+                            
                             
                           ),#chiude il panello laterale
                           
@@ -86,56 +96,42 @@ navbarPage("Carte di controllo",
 
 ###Server#####################################################################################################
  
-  worksheet <- reactive({
-    input$ws
-  })
-  
- 
- 
+
 dati<-reactive ({read_sheet(id$id, col_types = "cidddd", sheet = input$ws)  })
   
   
-  output$tdati <- renderTable({
-    Sys.sleep(3)
-    dati() %>% 
-      arrange(desc(piastra)) %>% 
+  output$dati <- renderTable({
+    # Sys.sleep(3)
+    dati() %>%
+      arrange(desc(piastra)) %>%
       head(10)
   })
   
+   
   
-  
-
-  
-  output$validazione<-renderTable({
+output$validazione<-renderTable({
     
     valid<-read.csv("validazione.csv", header=T, sep=";", dec=',')
     valid
     
     
   })
+###########################################################################################
+
+df <- reactive(dati() %>% 
+  select(data, piastra, X = input$par) %>% 
+    mutate(data = dmy(data), 
+           anno = substring(as.factor(as.Date(year(data),"-01","-01",sep="")), 1,4),
+           R = abs(X-lag(X))))
+
   
   output$MyPlot <- renderPlotly({
-    Sys.sleep(3)
-    df <- dati
-    df$data<-dmy(df$data)
-    df<-mutate(df,anno=year(data))
-    df$anno<-as.Date((paste(df$anno,"-01","-01",sep="")))
-    df$anno<-substring(as.factor(df$anno),1,4)
-    dfx<-df %>% 
-      filter(anno==input$anno) %>% 
-      rowwise() %>% 
-      mutate(X = input$parametro) %>% 
-      data.frame() %>% 
-      mutate(R = abs(X-lag(X)))
+    meanx<-mean(df()$X,na.rm=T)
+    xul<-mean(df()$X, na.rm = T)+2.66*mean(df()$R, na.rm=T)
+    xil<-mean(df()$X, na.rm = T)-2.66*mean(df()$R, na.rm=T)
+    xends<-max(df()$piastra, na.rm=TRUE)
     
-    
-    meanx<-mean(dfx$X,na.rm=T)
-    xul<-mean(dfx$X, na.rm = T)+2.66*mean(dfx$R, na.rm=T)
-    xil<-mean(dfx$X, na.rm = T)-2.66*mean(dfx$R, na.rm=T)
-    xends<-max(dfx$piastra, na.rm=TRUE)
-    
-    ggplotly(ggplot(dfx, aes(x = piastra, y = X)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
-               
+    ggplotly(ggplot(df(), aes(x = piastra, y = X)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
                geom_segment(aes(x=piastra,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
                geom_segment(aes(x=piastra,xend=xends,y=xul,yend=xul), color='blue', linetype=1,size=0.2)+
                geom_segment(aes(x=piastra,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
@@ -146,37 +142,23 @@ dati<-reactive ({read_sheet(id$id, col_types = "cidddd", sheet = input$ws)  })
      })
   
   output$MyPlot2 <- renderPlotly({
-    Sys.sleep(3)
-    df <- gs_read(ccsiero, ws = worksheet())#,locale = readr::locale(decimal_mark = ","))
-    df<-as_tibble(df)
-    df$data<-dmy(df$data)
-    df<-mutate(df,anno=year(data))
-    df$anno<-as.Date((paste(df$anno,"-01","-01",sep="")))
-    df$anno<-substring(as.factor(df$anno),1,4)
-    dfx<-df %>% 
-      filter(anno==input$anno) %>% 
-      rowwise() %>% 
-      mutate(X=mean(c(ct1,ct2))) %>% 
-      data.frame() %>% 
-      mutate(R = abs(X-lag(X)))
 
-    meanx<-mean(dfx$R,na.rm=T)
-    xul<-3.26*mean(dfx$R, na.rm=T)
+    meanx<-mean(df()$R,na.rm=T)
+    xul<-3.26*mean(df()$R, na.rm=T)
     xil<-0
-    xends<-max(dfx$piastra, na.rm=TRUE)
-    
-        ggplotly(ggplot(dfx, aes(x = piastra, y = R)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
-                
-                   geom_segment(aes(x=piastra,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
-                   geom_segment(aes(x=piastra,xend=xends,y=xul,yend=xul), color='blue', linetype=1, size=0.2)+
-                   geom_segment(aes(x=piastra,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
-                   geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = meanx, label = paste("LC=", round(meanx,3))),size=3)+
-                   geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
-                   geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
-  
-  
+    xends<-max(df()$piastra, na.rm=TRUE)
+
+    ggplotly(ggplot(df(), aes(x = piastra, y = R)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
+               geom_segment(aes(x=piastra,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
+               geom_segment(aes(x=piastra,xend=xends,y=xul,yend=xul), color='blue', linetype=1, size=0.2)+
+               geom_segment(aes(x=piastra,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
+               geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = meanx, label = paste("LC=", round(meanx,3))),size=3)+
+               geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
+               geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
+
+
 })
-  
+
 
   output$validR <- renderPlotly({
 

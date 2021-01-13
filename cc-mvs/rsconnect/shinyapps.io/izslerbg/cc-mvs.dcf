@@ -1,0 +1,13 @@
+name: cc-mvs
+title: cc-mvs
+username:
+account: izslerbg
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3336932
+bundleId: 3932108
+url: https://izslerbg.shinyapps.io/cc-mvs/
+when: 1606902086.30877
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: A.xls|COF.R|debug.log|MVS dal 02-01 al 18-05-2020.xls|MVS dal 22-05 al 21-09-2020.xls|mvs.xlsx
