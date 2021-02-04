@@ -41,13 +41,19 @@ output$app = renderUI(
                                         "IBR_Siero", 
                                         "Mycoplasma_agal", 
                                         "LEB ", 
-                                        "FEBBRE_Q")),
+                                        "FEBBRE_Q"), "IBR_Siero"),
                             
                             #tableOutput("tsiero"),
                             br(),
                             sliderInput("anno","anno",min=2015, max=2022,value="2021"),
                             hr(),
                             tableOutput("tsiero"),
+                            hr(),
+                            a(actionButton("Ins", "Inserimento nuovi dati",
+                                           class = "btn-primary",
+                                           icon("flask")),
+                              href="https://docs.google.com/spreadsheets/d/1dsfJJy_bxJi-Fid3mPyncVvjpMfi87mqxtRQtM_7H5M/edit#gid=849986334")
+
                             
                           ),#chiude il panello laterale
                           
@@ -147,7 +153,7 @@ df <-  reactive(dati()  %>%  rowwise() %>%
 output$tsiero <-  renderTable({
   # Sys.sleep(3)
   df() %>% tibble() %>% 
-    select(anno,piastra, ct1, ct2, X, R)
+    select(anno,piastra, ct1, ct2, X, R) %>% 
   arrange(desc(piastra)) %>%
     head(10)
 })
