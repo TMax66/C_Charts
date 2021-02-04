@@ -45,8 +45,9 @@ output$app = renderUI(
                             
                             #tableOutput("tsiero"),
                             br(),
-                            
-                            sliderInput("anno","anno",min=2015, max=2022,value="2021")
+                            sliderInput("anno","anno",min=2015, max=2022,value="2021"),
+                            hr(),
+                            tableOutput("tsiero"),
                             
                           ),#chiude il panello laterale
                           
@@ -131,13 +132,7 @@ output$app = renderUI(
 dati <-reactive ({read_sheet(sid$id, col_types = "cdccddc",  sheet = input$ws)  })
   
 
-###Tabella sierologia####
-  output$tsiero <-  renderTable({
-    # Sys.sleep(3)
-    dati() %>%
-      arrange(desc(piastra)) %>%
-      head(10)
-  })
+
   
 ###Grafici sierologia####
 df <-  reactive(dati()  %>%  rowwise() %>% 
@@ -148,7 +143,15 @@ df <-  reactive(dati()  %>%  rowwise() %>%
   mutate(R = abs(X-lag(X))) %>% 
     filter(anno==input$anno))
 
-  
+###Tabella sierologia####
+output$tsiero <-  renderTable({
+  # Sys.sleep(3)
+  df() %>% tibble() %>% 
+    select(anno,piastra, ct1, ct2, X, R)
+  arrange(desc(piastra)) %>%
+    head(10)
+})
+   
 ####Grafico X####
 output$MyPlot <- renderPlotly({
   Sys.sleep(2)

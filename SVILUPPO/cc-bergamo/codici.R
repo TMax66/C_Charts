@@ -32,6 +32,11 @@ df <-  dati  %>%  rowwise() %>%
   data.frame() %>% 
   mutate(R = abs(X-lag(X)))
 
+df %>% tibble() %>% 
+  select(anno, piastra, ct1, ct2, X, R)
+arrange(desc(piastra)) %>%
+  head(10)
+
 meanx<-mean(df$X,na.rm=T)
 xul<-mean(df$X, na.rm = T)+2.66*mean(df$R, na.rm=T)
 xil<-mean(df$X, na.rm = T)-2.66*mean(df$R, na.rm=T)
