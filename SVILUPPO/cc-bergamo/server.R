@@ -35,12 +35,12 @@ output$app = renderUI(
                                         choices = c("Brucellosi", 
                                         "Neospora", 
                                         "BVD_C+", 
-                                        "ScreenPTBC_C+", 
+                                        "ScreenPTBC_C+ ", 
                                         "ConfPTBC_C+",
                                         "IBR_latte",
                                         "IBR_Siero", 
                                         "Mycoplasma_agal", 
-                                        "LEB", 
+                                        "LEB ", 
                                         "FEBBRE_Q")),
                             
                             #tableOutput("tsiero"),
@@ -64,8 +64,8 @@ output$app = renderUI(
                tabPanel("Microbiologia Alimenti",
                         fluidPage(
                           sidebarPanel(
-                            selectInput("wsm", "",
-                                        choices = ccmicro$ws$ws_title),
+                            # selectInput("wsm", "",
+                            #             choices = ccmicro$ws$ws_title),
                             
                             #tableOutput("tmicro"),
                             br(),
@@ -140,15 +140,18 @@ dati <-reactive ({read_sheet(sid$id, col_types = "cdccddc",  sheet = input$ws)  
   })
   
 ###Grafici sierologia####
-df <- reactive(dati() %>% 
-                 mutate(data = dmy(data), 
-                        anno = substring(as.factor(as.Date(year(data),"-01","-01",sep="")), 1,4),
-                        X=mean(c(ct1,ct2)),
-                        R = abs(X-lag(X))))
+df <-  reactive(dati()  %>%  rowwise() %>% 
+  mutate(X = mean(c(ct1,ct2)), 
+         data = dmy(data), 
+         anno = year(data)) %>% 
+  data.frame() %>% 
+  mutate(R = abs(X-lag(X))) %>% 
+    filter(anno==input$anno))
 
   
-
+####Grafico X####
 output$MyPlot <- renderPlotly({
+  Sys.sleep(2)
   meanx<-mean(df()$X,na.rm=T)
   xul<-mean(df()$X, na.rm = T)+2.66*mean(df()$R, na.rm=T)
   xil<-mean(df()$X, na.rm = T)-2.66*mean(df()$R, na.rm=T)
@@ -165,6 +168,22 @@ output$MyPlot <- renderPlotly({
 })
 
 
+####Grafico R####
+output$MyPlot2 <- renderPlotly({
+  Sys.sleep(2)
+  meanx<-mean(df()$R,na.rm=T)
+  xul<-3.26*mean(df()$R, na.rm=T)
+  xil<-0
+  xends<-max(df()$piastra, na.rm=TRUE)
+
+  ggplotly(ggplot(df(), aes(x = piastra, y = R)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
+             geom_segment(aes(x=piastra,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
+             geom_segment(aes(x=piastra,xend=xends,y=xul,yend=xul), color='blue', linetype=1, size=0.2)+
+             geom_segment(aes(x=piastra,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
+             geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = meanx, label = paste("LC=", round(meanx,3))),size=3)+
+             geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
+             geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
+})
 
 
 
