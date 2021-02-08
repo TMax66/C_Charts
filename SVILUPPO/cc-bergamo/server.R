@@ -1,7 +1,9 @@
 
-credentials <- list("CCbergamo" = ".#.Cc20")
+#credentials <- list("CCbergamo" = ".#.Cc20")
 
-shinyServer(function(input, output) {
+credentials <- list("cc" = "cc")
+
+ shinyServer(function(input, output) {
 USER <- reactiveValues(Logged = FALSE)
 
 observeEvent(input$.login, {
@@ -68,21 +70,21 @@ output$app = renderUI(
                               withSpinner(color="blue", type=8)))),
                
                
-               # tabPanel("Microbiologia Alimenti",
-               #          fluidPage(
-               #            sidebarPanel(
-               #              selectInput("wsm", "",
-               #                          choices = c("Salmonella", 
-               #                                      "Salmonella_ct_estrazione", 
-               #                                      "Listeria_monocytocenes", 
-               #                                      "Listeria_ct_estrazione", 
-               #                                      "Campylobacter",
-               #                                      "Campylobacter_ct_estrazione",
-               #                                      ), ""),
-               #              
+                 tabPanel("Microbiologia Alimenti",
+                        fluidPage(
+                          sidebarPanel(
+                             selectInput("wsm", "", choices = "Salmonella")))),
+                            #             choices = c("Salmonella",
+                            #                         "Salmonella_ct_estrazione",
+                            #                         "Listeria_monocytocenes",
+                            #                         "Listeria_ct_estrazione",
+                            #                         "Campylobacter",
+                            #                         "Campylobacter_ct_estrazione",
+                            #                         ),"Salmonella")))),
+               # 
                #              #tableOutput("tmicro"),
                #              br(),
-               #              
+               # 
                #              sliderInput("anno2","anno",min=2015, max=2022,value="2021"),
                #              hr(),
                #              tableOutput("tmicro"),
@@ -91,18 +93,18 @@ output$app = renderUI(
                #                             class = "btn-primary",
                #                             icon("flask")),
                #                href="https://docs.google.com/spreadsheets/d/1tmeb3a_l3YCTXkn8yNqXSDJqbx0LVTdYIKd85bcg77I/edit?usp=sharing"),
-               #              
-               #              
+               # 
+               # 
                #            ),#chiude il panello laterale
-               #            
+               # 
                #            mainPanel(
-               #              
-               #              
+               # 
+               # 
                #              plotlyOutput("MyPlotmicro")%>%
                #                withSpinner(color="blue", type=8),
                #              plotlyOutput("MyPlot2micro")%>%
                #                withSpinner(color="blue", type=8) ))),
-               # 
+
                tabPanel("Validazione",
                         fluidPage(
                           fluidRow( 
