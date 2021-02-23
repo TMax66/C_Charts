@@ -36,7 +36,7 @@ navbarPage("Carte di controllo",
                         fluidPage(
                           sidebarPanel(
                             selectInput("ws", "Seleziona la prova",
-                                        choices = c("mvs", "sierotipoA")),
+                                        choices = c("MVS", "sierotipo A")),
                             selectInput("par", "Seleziona il parametro", 
                                         choices = c("DO_Cn", "ICn7.5", "Cp202", "Cp7.5")), 
                             br(),

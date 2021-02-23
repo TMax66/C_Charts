@@ -22,7 +22,7 @@ options(
 drive_auth()
 gs4_auth(token = drive_token())
   mydrive<-drive_find(type = "spreadsheet")
-id<-filter(mydrive, mydrive$name == "mvs")
+id<-filter(mydrive, mydrive$name == "MVS")
 ##______________________________________________________________________________
 
 
