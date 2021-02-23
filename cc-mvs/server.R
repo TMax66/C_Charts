@@ -31,12 +31,12 @@ output$app = renderUI(
 
 ###UI___________________________________________________
 navbarPage("Carte di controllo",
-               
-               tabPanel("CC",
+               ### Pannello MVS####
+               tabPanel("MVS",
                         fluidPage(
                           sidebarPanel(
-                            selectInput("ws", "Seleziona la prova",
-                                        choices = c("MVS", "sierotipo A")),
+                            # selectInput("ws", "Seleziona la prova",
+                            #             choices = c("MVS", "sierotipo A")),
                             selectInput("par", "Seleziona il parametro", 
                                         choices = c("DO_Cn", "ICn7.5", "Cp202", "Cp7.5")), 
                             br(),
@@ -62,7 +62,45 @@ navbarPage("Carte di controllo",
                             
                             plotlyOutput("MyPlot2") %>%
                               withSpinner(color="blue", type=8)))),
-               
+              ### Pannello AFTA####
+              tabPanel("AFTA", 
+                       fluidPage(
+                         sidebarPanel(
+                           selectInput("ws", "Seleziona la prova",
+                                        choices = c("sierotipo A", "Asia1", "SAT2", "OM")),
+                           selectInput("par", "Seleziona il parametro", 
+                                       choices = c("DO_Cn", "ICp10", "ICp30")), 
+                           br(),
+                           
+                           tableOutput("dati"), 
+                           
+                           #sliderInput("anno","anno",min=2015, max=2022,value="2019")
+                           
+                           a(actionButton("Ins", "Inserimento nuovi dati",
+                                          class = "btn-primary",
+                                          icon("flask")),
+                             href="https://docs.google.com/spreadsheets/d/1QMIQGZGB4oqIj6QNJdg6YaGZ1jc5PTmJz4-NP-YtLYs/edit?usp=sharing"),
+                           
+                           
+                           
+                           
+                         ),#chiude il panello laterale
+                         
+                         mainPanel(
+                           
+                           plotlyOutput("MyPlot") %>% 
+                             withSpinner(color="blue", type=8),
+                           
+                           plotlyOutput("MyPlot2") %>%
+                             withSpinner(color="blue", type=8)))
+                         
+                         
+                         
+                         
+                         
+                         
+                         ), 
+              ### Pannello Validazione####
                tabPanel("Validazione",
                         fluidPage(
                           fluidRow( 
@@ -97,12 +135,12 @@ navbarPage("Carte di controllo",
 ###Server#####################################################################################################
  
 
-dati<-reactive ({read_sheet(id$id, col_types = "cidddd", sheet = input$ws)  })
+datiMVS<-reactive ({read_sheet(id$id, col_types = "cidddd", sheet = "MVS")  })
   
   
   output$dati <- renderTable({
     # Sys.sleep(3)
-    dati() %>%
+    datiMVS() %>%
       arrange(desc(piastra)) %>%
       head(10)
   })
@@ -118,7 +156,7 @@ output$validazione<-renderTable({
   })
 ###########################################################################################
 
-df <- reactive(dati() %>% 
+df <- reactive(datiMVS() %>% 
   select(data, piastra, X = input$par) %>% 
     mutate(data = dmy(data), 
            anno = substring(as.factor(as.Date(year(data),"-01","-01",sep="")), 1,4),
