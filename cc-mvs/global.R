@@ -25,6 +25,7 @@ gs4_auth(token = drive_token())
 id<-filter(mydrive, mydrive$name == "MVS")
 ##______________________________________________________________________________
 
+datiMVS<-reactive ({read_sheet(id$id, col_types = "cidddd", sheet = "MVS")  })
 
 
 
