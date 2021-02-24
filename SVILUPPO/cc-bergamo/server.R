@@ -29,7 +29,7 @@ output$app = renderUI(
     ))
   } else {
     navbarPage("Carte di controllo",
-               
+               #### Panel Sierologia####
                tabPanel("Sierologia",
                         fluidPage(
                           sidebarPanel(
@@ -69,21 +69,28 @@ output$app = renderUI(
                             plotlyOutput("MyPlot2") %>%
                               withSpinner(color="blue", type=8)))),
                
-               
+              # Panel Micro####
                  tabPanel("Microbiologia Alimenti",
                         fluidPage(
                           sidebarPanel(
-                             selectInput("wsm", "", choices = "Salmonella")))),
-                            #             choices = c("Salmonella",
-                            #                         "Salmonella_ct_estrazione",
-                            #                         "Listeria_monocytocenes",
-                            #                         "Listeria_ct_estrazione",
-                            #                         "Campylobacter",
-                            #                         "Campylobacter_ct_estrazione",
-                            #                         ),"Salmonella")))),
-               # 
-               #              #tableOutput("tmicro"),
-               #              br(),
+                             selectInput("wsm", "", 
+                           choices = c("Salmonella",
+                                       "Salmonella_ct_estrazione",
+                                       "Listeria_monocytocenes",
+                                       "Listeria_ct_estrazione",
+                                       "Campylobacter",
+                                       "Campylobacter_ct_estrazione"
+                                       ),"Salmonella"), 
+                           br(),
+                           
+                           sliderInput("anno","anno",min=2015, max=2022,value="2021"),
+                           
+                           tableOutput("tmicro")),
+                           
+                           ),
+                         
+                             
+                        ),
                # 
                #              sliderInput("anno2","anno",min=2015, max=2022,value="2021"),
                #              hr(),
@@ -207,27 +214,27 @@ output$MyPlot2 <- renderPlotly({
 })
 
 
-# ##Dati per grafici microbiologia####
-# 
-# micro <-reactive ({read_sheet(mid$id, col_types = "cddc",  sheet = input$wsm)  })
-# 
-# dfm <-  reactive(micro() %>%   
-#                    mutate(data = dmy(data),
-#                           anno = year(data),
-#                           R = abs(X-lag(X))) %>% 
-#                   filter(anno==input$anno))
-# 
-# 
-# ###Tabella microbiologia####
-# output$tmicro <-  renderTable({
-#   # Sys.sleep(3)
-#   dfm() %>% tibble() %>% 
-#     select(data,piastra,  X, R) %>% 
-#     arrange(desc(piastra)) %>%
-#     head(10)
-# })
-# 
-# 
+##Dati per grafici microbiologia####
+
+
+micro <-reactive ({read_sheet(mid$id, col_types = "cddc",  sheet = input$wsm)  })
+
+dfm <-  reactive(micro() %>%
+                   mutate(data = dmy(data),
+                          anno = year(data),
+                          R = abs(X-lag(X))) %>%
+                  filter(anno==input$anno))
+
+
+####Tabella microbiologia####
+
+output$tmicro <-  renderTable({
+  dfm() %>% tibble() %>%
+    select(data,piastra,  X, R) %>%
+    arrange(desc(piastra)) %>%
+    head(10)
+})
+
 # ####Grafico X####
 # output$MyPlotmicro <- renderPlotly({
 #   Sys.sleep(2)
