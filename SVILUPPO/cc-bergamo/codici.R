@@ -57,6 +57,19 @@ dfm <-micro %>%
                geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
                geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
  
-  
 
-                 
+    
+    
+ 
+
+micro <- read_sheet(mid$id, col_types = "cddc",  sheet = "Salmonella") 
+
+dfm <- micro  %>%
+    mutate(data = dmy(data),
+           anno = year(data),
+           R = abs(X-lag(X)))
+
+
+
+#%>%
+    filter(anno==2021)

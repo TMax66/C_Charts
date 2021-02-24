@@ -85,33 +85,24 @@ output$app = renderUI(
                            
                            sliderInput("anno","anno",min=2015, max=2022,value="2021"),
                            
-                           tableOutput("tmicro")),
+                           tableOutput("tmicro"),
                            
-                           ),
-                         
-                             
-                        ),
-               # 
-               #              sliderInput("anno2","anno",min=2015, max=2022,value="2021"),
-               #              hr(),
-               #              tableOutput("tmicro"),
-               #              hr(),
-               #              a(actionButton("Ins", "Inserimento nuovi dati",
-               #                             class = "btn-primary",
-               #                             icon("flask")),
-               #                href="https://docs.google.com/spreadsheets/d/1tmeb3a_l3YCTXkn8yNqXSDJqbx0LVTdYIKd85bcg77I/edit?usp=sharing"),
-               # 
-               # 
-               #            ),#chiude il panello laterale
-               # 
-               #            mainPanel(
-               # 
-               # 
-               #              plotlyOutput("MyPlotmicro")%>%
-               #                withSpinner(color="blue", type=8),
-               #              plotlyOutput("MyPlot2micro")%>%
-               #                withSpinner(color="blue", type=8) ))),
+                           a(actionButton("Ins", "Inserimento nuovi dati",
+                                                                      class = "btn-primary",
+                                                                      icon("flask")),
+                                                         href="https://docs.google.com/spreadsheets/d/1tmeb3a_l3YCTXkn8yNqXSDJqbx0LVTdYIKd85bcg77I/edit?usp=sharing"),
 
+
+                                                     ), 
+                           
+                        mainPanel(
+                          
+                          plotlyOutput("MyPlotmicro")%>%
+                            withSpinner(color="blue", type=8),
+                          plotlyOutput("MyPlot2micro")%>%
+                            withSpinner(color="blue", type=8) ))),
+              
+#Panel Validazione####
                tabPanel("Validazione",
                         fluidPage(
                           fluidRow( 
@@ -134,7 +125,12 @@ output$app = renderUI(
                           )
                           
                           
-                        ))
+                        )), 
+                tabPanel("IO BG/024 rev.6", 
+                         mainPanel(fluidRow(
+                           htmlOutput("frame")
+                         )
+                         ))
                
                
     )
@@ -219,61 +215,58 @@ output$MyPlot2 <- renderPlotly({
 
 micro <-reactive ({read_sheet(mid$id, col_types = "cddc",  sheet = input$wsm)  })
 
-dfm <-  reactive(micro() %>%
+dfm <-  reactive({micro() %>%
                    mutate(data = dmy(data),
                           anno = year(data),
                           R = abs(X-lag(X))) %>%
-                  filter(anno==input$anno))
+                  filter(anno==input$anno)})
 
 
-####Tabella microbiologia####
+### Tabella microbiologia####
 
 output$tmicro <-  renderTable({
   dfm() %>% tibble() %>%
-    select(data,piastra,  X, R) %>%
+    select(anno, piastra,  X, R) %>%
     arrange(desc(piastra)) %>%
     head(10)
 })
 
-# ####Grafico X####
-# output$MyPlotmicro <- renderPlotly({
-#   Sys.sleep(2)
-#   meanx<-mean(dfm()$X,na.rm=T)
-#   xul<-mean(dfm()$X, na.rm = T)+2.66*mean(dfm()$R, na.rm=T)
-#   xil<-mean(dfm()$X, na.rm = T)-2.66*mean(dfm()$R, na.rm=T)
-#   xends<-max(dfm()$piastra, na.rm=TRUE)
-#   
-#   ggplotly(ggplot(dfm(), aes(x = piastra, y = X)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
-#              geom_segment(aes(x=piastra,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
-#              geom_segment(aes(x=piastra,xend=xends,y=xul,yend=xul), color='blue', linetype=1,size=0.2)+
-#              geom_segment(aes(x=piastra,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
-#              geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = meanx, label = paste("LC=", round(meanx,3))),size=3)+
-#              geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
-#              geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
-#   
-# })
-# 
-# 
-# 
-# ####Grafico R####
-# 
-# output$MyPlot2micro <- renderPlotly({
-#   Sys.sleep(2)
-#   meanx<-mean(dfmicro()$R,na.rm=T)
-#   xul<-3.26*mean(dfmicro()$R, na.rm=T)
-#   xil<-0
-#   xends<-max(dfmicro()$piastra, na.rm=TRUE)
-#   
-#   ggplotly(ggplot(dfmicro(), aes(x = piastra, y = R)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
-#              geom_segment(aes(x=piastra,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
-#              geom_segment(aes(x=piastra,xend=xends,y=xul,yend=xul), color='blue', linetype=1, size=0.2)+
-#              geom_segment(aes(x=piastra,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
-#              geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = meanx, label = paste("LC=", round(meanx,3))),size=3)+
-#              geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
-#              geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
-# })
-# 
-# 
+####Grafico X####
+output$MyPlotmicro <- renderPlotly({
+  Sys.sleep(2)
+  meanx<-mean(dfm()$X,na.rm=T)
+  xul<-mean(dfm()$X, na.rm = T)+2.66*mean(dfm()$R, na.rm=T)
+  xil<-mean(dfm()$X, na.rm = T)-2.66*mean(dfm()$R, na.rm=T)
+  xends<-max(dfm()$piastra, na.rm=TRUE)
+
+  ggplotly(ggplot(dfm(), aes(x = piastra, y = X)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
+             geom_segment(aes(x=piastra,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
+             geom_segment(aes(x=piastra,xend=xends,y=xul,yend=xul), color='blue', linetype=1,size=0.2)+
+             geom_segment(aes(x=piastra,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
+             geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = meanx, label = paste("LC=", round(meanx,3))),size=3)+
+             geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
+             geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
+
+})
+
+## ####Grafico R####
+
+output$MyPlot2micro <- renderPlotly({
+  Sys.sleep(2)
+  meanx<-mean(dfm()$R,na.rm=T)
+  xul<-3.26*mean(dfm()$R, na.rm=T)
+  xil<-0
+  xends<-max(dfm()$piastra, na.rm=TRUE)
+
+  ggplotly(ggplot(dfm(), aes(x = piastra, y = R)) + geom_point(size=0.3)+geom_line(linetype=1, size=0.2)+
+             geom_segment(aes(x=piastra,xend=xends,y=meanx,yend=meanx), color='blue', linetype=1,size=0.2)+
+             geom_segment(aes(x=piastra,xend=xends,y=xul,yend=xul), color='blue', linetype=1, size=0.2)+
+             geom_segment(aes(x=piastra,xend=xends,y=xil,yend=xil), color='blue', linetype=1,size=0.2)+
+             geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = meanx, label = paste("LC=", round(meanx,3))),size=3)+
+             geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xul, label = paste("LSup=", round(xul,3))), size=3)+
+             geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
+})
+ 
 
 
 ##Tabella validazione####
@@ -327,9 +320,13 @@ output$validazione<-renderTable({
                geom_text(aes(x = max(piastra, na.rm=TRUE)+10, y = xil, label = paste("LInf=", round(xil,3))),size=3))
     
   })
+
+  output$frame <- renderUI({
+  tags$iframe(src="A.pdf")
+  })
   
-  
-  
+
+
   
 })
   
