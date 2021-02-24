@@ -322,7 +322,7 @@ output$validazione<-renderTable({
   })
 
   output$frame <- renderUI({
-  tags$iframe(src="A.pdf")
+  tags$iframe(src="pdf/A.pdf")
   })
   
 
