@@ -1,7 +1,7 @@
 
-#credentials <- list("CCbergamo" = ".#.Cc20")
+credentials <- list("CCbergamo" = ".#.Cc20")
 
-credentials <- list("cc" = "cc")
+#credentials <- list("cc" = "cc")
 
  shinyServer(function(input, output) {
 USER <- reactiveValues(Logged = FALSE)
@@ -28,7 +28,7 @@ output$app = renderUI(
                     textOutput("message")
     ))
   } else {
-    navbarPage("Carte di controllo",
+    navbarPage("Carte di controllo (ver 1.0 del 25/02/2021)",
                #### Panel Sierologia####
                tabPanel("Sierologia",
                         fluidPage(
@@ -125,12 +125,12 @@ output$app = renderUI(
                           )
                           
                           
-                        )), 
-                tabPanel("IO BG/024 rev.6", 
-                         mainPanel(fluidRow(
-                           htmlOutput("frame")
-                         )
-                         ))
+                        )) 
+                # tabPanel("IO BG/024 rev.6", 
+                #          mainPanel(fluidRow(
+                #            htmlOutput("frame")
+                #          )
+                #          ))
                
                
     )
@@ -321,10 +321,10 @@ output$validazione<-renderTable({
     
   })
 
-  output$frame <- renderUI({
-  tags$iframe(src="pdf/A.pdf")
-  })
-  
+  # output$frame <- renderUI({
+  # tags$iframe(src="pdf/A.pdf")
+  # })
+  # 
 
 
   
