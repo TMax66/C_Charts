@@ -5,9 +5,9 @@ account: izslerbg
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3336932
-bundleId: 4265510
+bundleId: 4289492
 url: https://izslerbg.shinyapps.io/cc-mvs/
-when: 1614159121.02595
+when: 1614675762.99567
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: A.xls|ASIA.xls|codici.R|COF.R|debug.log|MVS.xlsx|OM.xls|SAT2.xls
