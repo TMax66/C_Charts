@@ -43,7 +43,8 @@ output$app = renderUI(
                                         "IBR_Siero", 
                                         "Mycoplasma_agal", 
                                         "LEB ", 
-                                        "FEBBRE_Q"), "IBR_Siero"),
+                                        "FEBBRE_Q",
+                                        "CLA"), "IBR_Siero"),
                             
                             #tableOutput("tsiero"),
                             br(),
