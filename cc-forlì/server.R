@@ -30,7 +30,7 @@ output$app = renderUI(
   } else {
 
 ###UI___________________________________________________
-navbarPage("Carte di controllo (ver 0 del 09/06/2021)",
+navbarPage("S.T. di Forlì - Carte di controllo (ver 0 del 11/06/2021)",
                ### Pannello Sierologia####
                tabPanel("Sierologia",
                         fluidPage(
@@ -41,12 +41,12 @@ navbarPage("Carte di controllo (ver 0 del 09/06/2021)",
                             
                             tableOutput("dati"), 
                             
-                            sliderInput("anno","anno",min=2015, max=2022,value="2019"), 
+                            sliderInput("anno","anno",min=2021, max=2021,value="2021"), 
                             
                             a(actionButton("Ins", "Inserimento nuovi dati",
                                            class = "btn-primary",
                                            icon("flask")),
-                              href="https://docs.google.com/spreadsheets/d/1YlnFY0wK4d5VTZk8gJezKqAti1QiUGrESSQnI7iZ340/edit?usp=sharing"),
+                              href="https://docs.google.com/spreadsheets/d/1KWzjYlimEZkbCZS0uJ5W9kk16yN9ihvC4UaC90T2Hqw/edit?usp=sharing"),
                             
                             
                             
@@ -95,13 +95,13 @@ navbarPage("Carte di controllo (ver 0 del 09/06/2021)",
 
 ###Server#####################################################################################################
  
-datiforli<-reactive ({read_sheet(id$id, col_types = "cdccddc", sheet = input$par)  })
+datiforli<-reactive ({read_sheet(id$id, col_types = "cdcdc", sheet = input$par)  })
 
   
   output$dati <- renderTable({
     # Sys.sleep(3)
     datiforli() %>%
-      select(data, piastra, ct1, ct2) %>% 
+      select(data, piastra, ct1) %>% 
       arrange(desc(piastra)) %>%
       head(10)
   })
@@ -113,7 +113,7 @@ datiforli<-reactive ({read_sheet(id$id, col_types = "cdccddc", sheet = input$par
 
 df <- reactive({datiforli() %>% 
     rowwise() %>% 
-    mutate(X = mean(c(ct1, ct2)), 
+    mutate(X = ct1, 
            data = dmy(data), 
            anno = year(data)) %>% 
     data.frame() %>% 
