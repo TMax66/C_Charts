@@ -1,0 +1,13 @@
+name: cc-forli
+title: cc-forli
+username:
+account: izslerapp
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4258110
+bundleId: 4705538
+url: https://izslerapp.shinyapps.io/cc-forli/
+when: 1623418734.58118
+lastSyncTime: 1623418734.58118
+asMultiple: FALSE
+asStatic: FALSE
