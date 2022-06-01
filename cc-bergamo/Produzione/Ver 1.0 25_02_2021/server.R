@@ -84,7 +84,7 @@ output$app = renderUI(
                                        ),"Salmonella"), 
                            br(),
                            
-                           sliderInput("anno","anno",min=2015, max=2022,value="2021"),
+                           sliderInput("anno2","anno",min=2015, max=2022,value="2022"),
                            
                            tableOutput("tmicro"),
                            
@@ -220,7 +220,7 @@ dfm <-  reactive({micro() %>%
                    mutate(data = dmy(data),
                           anno = year(data),
                           R = abs(X-lag(X))) %>%
-                  filter(anno==input$anno)})
+                  filter(anno==input$anno2)})
 
 
 ### Tabella microbiologia####

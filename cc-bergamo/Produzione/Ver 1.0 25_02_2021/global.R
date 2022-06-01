@@ -10,11 +10,11 @@ library("shinyjs")
 
 ########################
 
-#IL CODICE SEGUENTE SI FA SOLO LA PRIMA VOLTA CHE SI ACCEDE AL DRIVE DI GOOGLE
-options(gargle_oauth_cache = ".secrets")
-gargle::gargle_oauth_cache()
-drive_auth()
-list.files(".secrets/")
+# #IL CODICE SEGUENTE SI FA SOLO LA PRIMA VOLTA CHE SI ACCEDE AL DRIVE DI GOOGLE
+# options(gargle_oauth_cache = ".secrets")
+# gargle::gargle_oauth_cache()
+# drive_auth()
+# list.files(".secrets/")
 
 ###il seguente codice va fatto girare sempre####________________________________
 options(

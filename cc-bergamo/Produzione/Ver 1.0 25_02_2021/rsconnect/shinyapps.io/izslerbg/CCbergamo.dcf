@@ -5,8 +5,10 @@ account: izslerbg
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 976402
-bundleId: 4270526
+bundleId: 5968541
 url: https://izslerbg.shinyapps.io/CCbergamo/
-when: 1614251462.53406
+when: 1654103668.37393
+lastSyncTime: 1654103668.37393
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: _gitignore|7de79f94bf0e44ea88d62747fa42aaa1

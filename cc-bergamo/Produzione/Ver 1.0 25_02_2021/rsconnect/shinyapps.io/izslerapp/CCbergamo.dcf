@@ -4,10 +4,11 @@ username:
 account: izslerapp
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 3696572
-bundleId: 4270454
+appId: 6412756
+bundleId: 5968520
 url: https://izslerapp.shinyapps.io/CCbergamo/
-when: 1614250433.463
+when: 1654103379.60939
+lastSyncTime: 1654103379.60939
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: _gitignore|codici.R
+ignoredFiles: 7de79f94bf0e44ea88d62747fa42aaa1
