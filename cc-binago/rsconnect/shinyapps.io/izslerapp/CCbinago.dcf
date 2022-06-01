@@ -1,0 +1,13 @@
+name: CCbinago
+title: CCbinago
+username:
+account: izslerapp
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 6413529
+bundleId: 5968912
+url: https://izslerapp.shinyapps.io/CCbinago/
+when: 1654111036.20715
+lastSyncTime: 1654111036.20715
+asMultiple: FALSE
+asStatic: FALSE
