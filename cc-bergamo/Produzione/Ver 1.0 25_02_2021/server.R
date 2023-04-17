@@ -48,7 +48,7 @@ output$app = renderUI(
                             
                             #tableOutput("tsiero"),
                             br(),
-                            sliderInput("anno","anno",min=2015, max=2022,value="2021"),
+                            sliderInput("anno","anno",min=2021, max=2024,value="2023"),
                             hr(),
                             tableOutput("tsiero"),
                             hr(),
@@ -84,7 +84,7 @@ output$app = renderUI(
                                        ),"Salmonella"), 
                            br(),
                            
-                           sliderInput("anno2","anno",min=2015, max=2022,value="2022"),
+                           sliderInput("anno2","anno",min=2021, max=2024,value="2023"),
                            
                            tableOutput("tmicro"),
                            
